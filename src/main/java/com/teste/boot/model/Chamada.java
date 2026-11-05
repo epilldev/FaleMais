@@ -2,6 +2,7 @@
 package com.teste.boot.model;
 
 import java.text.DecimalFormat;
+import java.math.BigDecimal;
 
 /**
  * Representa os dados e os resultados financeiros de uma chamada.
@@ -12,7 +13,7 @@ public class Chamada {
 	protected String codigo_destino;
 	private String nome;
 	protected int tempo = 0;
-	protected double tarifa = 0;
+	protected BigDecimal tarifa = BigDecimal.ZERO;
 	protected String valor_plano = "0,00";
 	protected String valor_normal = "0,00";
 	private String tipo_plano;
@@ -51,11 +52,11 @@ public class Chamada {
 		this.tempo = tempo;
 	}
 
-	public double getTarifa() {
+	public BigDecimal getTarifa() {
 		return tarifa;
 	}
 
-	public void setTarifa(double tarifa) {
+	public void setTarifa(BigDecimal tarifa) {
 		this.tarifa = tarifa;
 	}
 
@@ -97,20 +98,39 @@ public class Chamada {
 		calcularValorPlano(object, 120);
 		return object;
 	}
+	/**
+	 * Calcula o valor da chamada considerando os minutos gratuitos do plano.
+	 */
+	private void calcularValorPlano(Chamada chamada, int minutosGratuitos) {
 
-	private void calcularValorPlano(Chamada object, int minutosGratuitos) {
-		int minutosExcedentes = Math.max(0, object.tempo - minutosGratuitos);
-
-		double tarifaComAcrescimo = object.tarifa * 1.10;
-
-		object.valor_plano = df.format(
-				tarifaComAcrescimo * minutosExcedentes
+		int minutosExcedentes = Math.max(
+				0,
+				chamada.tempo - minutosGratuitos
 		);
+
+		BigDecimal tarifaComAcrescimo = chamada.tarifa.multiply(
+				new BigDecimal("1.10")
+		);
+
+		BigDecimal valor = tarifaComAcrescimo.multiply(
+				BigDecimal.valueOf(minutosExcedentes)
+		);
+
+		chamada.valor_plano = df.format(valor);
 	}
 
-	public Chamada tarifaNormal(Chamada object) {
-		object.valor_normal = df.format(object.tarifa * object.tempo);
-		return object;
+	/**
+	 * Calcula o valor da chamada sem aplicar os minutos gratuitos.
+	 */
+	public Chamada tarifaNormal(Chamada chamada) {
+
+		BigDecimal valor = chamada.tarifa.multiply(
+				BigDecimal.valueOf(chamada.tempo)
+		);
+
+		chamada.valor_normal = df.format(valor);
+
+		return chamada;
 	}
 
 	public enum TipoPlano {

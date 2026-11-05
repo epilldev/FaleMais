@@ -5,6 +5,8 @@ import org.springframework.stereotype.Service;
 
 import com.teste.boot.model.Chamada;
 
+import java.math.BigDecimal;
+
 /**
  * Coordena a consulta de tarifas e o cálculo dos valores das chamadas.
  */
@@ -19,7 +21,7 @@ public class CalcularChamadaService {
 
 	public Chamada calcular(Chamada chamadaModel) {
 
-		double tarifa = tarifaService.buscarTarifa(
+		BigDecimal tarifa = tarifaService.buscarTarifa(
 				chamadaModel.getCodigo_origem(),
 				chamadaModel.getCodigo_destino()
 		);
