@@ -1,9 +1,12 @@
+
 package com.teste.boot.model;
 
 import java.text.DecimalFormat;
 
-
-public class Chamada {	
+/**
+ * Representa os dados e os resultados financeiros de uma chamada.
+ */
+public class Chamada {
 
 	protected String codigo_origem;
 	protected String codigo_destino;
@@ -13,10 +16,8 @@ public class Chamada {
 	protected String valor_plano = "0,00";
 	protected String valor_normal = "0,00";
 	private String tipo_plano;
-	DecimalFormat df = new DecimalFormat("###,###.00");
-	
-	
-	
+
+	private final DecimalFormat df = new DecimalFormat("#,##0.00");
 
 	public String getCodigo_origem() {
 		return codigo_origem;
@@ -81,64 +82,40 @@ public class Chamada {
 	public void setTipo_plano(String tipo_plano) {
 		this.tipo_plano = tipo_plano;
 	}
-	
-	
 
 	public Chamada faleMais30(Chamada object) {
-
-		if (object.tempo > 30) {
-			object.tarifa = object.cota(object)*1.1;
-			object.valor_plano = (df.format(object.tarifa *(object.tempo - 30))).toString();
-			return object;
-		}
+		calcularValorPlano(object, 30);
 		return object;
 	}
 
 	public Chamada faleMais60(Chamada object) {
-
-		if (object.tempo > 60) {
-			object.tarifa = object.cota(object)*1.1;
-			object.valor_plano = (df.format(object.tarifa *(object.tempo - 60))).toString();
-			return object;
-		}
+		calcularValorPlano(object, 60);
 		return object;
 	}
 
 	public Chamada faleMais120(Chamada object) {
-
-		if (object.tempo > 120) {
-			object.tarifa = object.cota(object)*1.1;
-			object.valor_plano = (df.format(object.tarifa *(object.tempo - 120))).toString();
-			return object;
-		}
+		calcularValorPlano(object, 120);
 		return object;
 	}
+
+	private void calcularValorPlano(Chamada object, int minutosGratuitos) {
+		int minutosExcedentes = Math.max(0, object.tempo - minutosGratuitos);
+
+		double tarifaComAcrescimo = object.tarifa * 1.10;
+
+		object.valor_plano = df.format(
+				tarifaComAcrescimo * minutosExcedentes
+		);
+	}
+
 	public Chamada tarifaNormal(Chamada object) {
-		object.valor_normal = (df.format(object.cota(object) * object.tempo)).toString();		
+		object.valor_normal = df.format(object.tarifa * object.tempo);
 		return object;
 	}
 
-	
-	public double cota(Chamada object) {
-		if (object.getCodigo_origem().equals("011") && object.getCodigo_destino().equals("016")) {
-			return object.tarifa = 1.90;
-		} else if (object.getCodigo_origem().equals("011") && object.getCodigo_destino().equals("017")) {
-			return object.tarifa  = 1.70;
-		} else if (object.getCodigo_origem().equals("016") && object.getCodigo_destino().equals("011")) {
-			return object.tarifa  = 2.90;
-		} else if (object.getCodigo_origem().equals("017") && object.getCodigo_destino().equals("011")) {
-			return object.tarifa  = 2.70;
-		} else if (object.getCodigo_origem().equals("011") && object.getCodigo_destino().equals("018")) {
-			return object.tarifa  = 0.90;
-		} else if (object.getCodigo_origem().equals("018") && object.getCodigo_destino().equals("011")) {
-			return object.tarifa  = 1.90;
-		} else {
-			return object.tarifa  = 0;
-		}
-	}
-	
 	public enum TipoPlano {
-		FaleMais30, FaleMais60, FaleMais120
+		FaleMais30,
+		FaleMais60,
+		FaleMais120
 	}
-
 }

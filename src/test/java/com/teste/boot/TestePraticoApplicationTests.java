@@ -3,6 +3,7 @@ package com.teste.boot;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import com.teste.boot.service.TarifaService;
 import org.junit.jupiter.api.Test;
 
 import com.teste.boot.model.Chamada;
@@ -10,8 +11,10 @@ import com.teste.boot.service.CalcularChamadaService;
 
 class TestePraticoApplicationTests {
 
+	private final TarifaService tarifaService = new TarifaService();
+
 	private final CalcularChamadaService service =
-			new CalcularChamadaService();
+			new CalcularChamadaService(tarifaService);
 
 	/*
 	 * Testes apenas dos métodos que fazem a manipulação de valores que são de extrema importância
