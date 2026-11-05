@@ -8,6 +8,7 @@ import java.math.BigDecimal;
 
 import org.junit.jupiter.api.Test;
 
+import com.teste.boot.exception.CombinacaoDddNaoAtendidaException;
 import com.teste.boot.service.TarifaService;
 
 /**
@@ -30,7 +31,7 @@ class TarifaServiceTests {
     @Test
     void deveLancarExcecaoParaCombinacaoNaoAtendida() {
         assertThrows(
-                IllegalArgumentException.class,
+                CombinacaoDddNaoAtendidaException.class,
                 () -> service.buscarTarifa("019", "011")
         );
     }

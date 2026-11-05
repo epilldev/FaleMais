@@ -84,7 +84,34 @@
 					<div class="card-body p-4">
 
 						<form th:action="@{/chamadas/calcular}"
+							  th:object="${chamada}"
 							  method="POST">
+
+							<!-- Mensagens de validação e regras de negócio -->
+							<div class="alert alert-danger"
+								 th:if="${mensagemErro != null}"
+								 th:text="${mensagemErro}">
+							</div>
+
+							<div class="alert alert-danger"
+								 th:if="${#fields.hasGlobalErrors()}">
+								<strong>Não foi possível realizar a simulação:</strong>
+								<ul class="mb-0 mt-2">
+									<li th:each="erro : ${#fields.globalErrors()}"
+										th:text="${erro}"></li>
+								</ul>
+							</div>
+
+							<div class="alert alert-danger"
+								 th:if="${#fields.hasErrors()}">
+								<strong>Verifique os dados informados:</strong>
+								<ul class="mb-0 mt-2">
+									<li th:each="erro : ${#fields.errors()}"
+										th:text="${erro}"></li>
+								</ul>
+							</div>
+
+
 
 							<!-- Nome -->
 							<div class="form-group">
@@ -96,8 +123,7 @@
 
 								<input type="text"
 									   class="form-control"
-									   id="nome"
-									   name="nome"
+									   th:field="*{nome}"
 									   placeholder="Como podemos chamar você?"
 									   maxlength="60"
 									   autocomplete="name"
@@ -118,13 +144,12 @@
 								<div class="btn-group btn-group-toggle d-flex"
 									 data-toggle="buttons">
 
-									<label class="btn btn-outline-primary active flex-fill mr-1 rounded">
+									<label class="btn btn-outline-primary flex-fill mr-1 rounded"
+										   th:classappend="${chamada.tipo_plano == 'FaleMais30'} ? ' active' : ''">
 
 										<input type="radio"
-											   name="tipo_plano"
-											   id="plano30"
+											   th:field="*{tipo_plano}"
 											   value="FaleMais30"
-											   checked
 											   autocomplete="off"/>
 
 										<span class="d-block font-weight-bold">
@@ -136,11 +161,11 @@
 									</label>
 
 
-									<label class="btn btn-outline-primary flex-fill mx-1 rounded">
+									<label class="btn btn-outline-primary flex-fill mx-1 rounded"
+										   th:classappend="${chamada.tipo_plano == 'FaleMais60'} ? ' active' : ''">
 
 										<input type="radio"
-											   name="tipo_plano"
-											   id="plano60"
+											   th:field="*{tipo_plano}"
 											   value="FaleMais60"
 											   autocomplete="off"/>
 
@@ -153,11 +178,11 @@
 									</label>
 
 
-									<label class="btn btn-outline-primary flex-fill ml-1 rounded">
+									<label class="btn btn-outline-primary flex-fill ml-1 rounded"
+										   th:classappend="${chamada.tipo_plano == 'FaleMais120'} ? ' active' : ''">
 
 										<input type="radio"
-											   name="tipo_plano"
-											   id="plano120"
+											   th:field="*{tipo_plano}"
 											   value="FaleMais120"
 											   autocomplete="off"/>
 
@@ -204,9 +229,8 @@
 
 									</label>
 
-									<select id="codigo_origem"
+									<select th:field="*{codigo_origem}"
 											class="form-control"
-											name="codigo_origem"
 											required>
 
 										<option value="">Selecione o DDD</option>
@@ -230,9 +254,8 @@
 
 									</label>
 
-									<select id="codigo_destino"
+									<select th:field="*{codigo_destino}"
 											class="form-control"
-											name="codigo_destino"
 											required>
 
 										<option value="">Selecione o DDD</option>
@@ -262,8 +285,7 @@
 										   min="1"
 										   step="1"
 										   class="form-control"
-										   id="tempo"
-										   name="tempo"
+										   th:field="*{tempo}"
 										   placeholder="Ex.: 45"
 										   required/>
 

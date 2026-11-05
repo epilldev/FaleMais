@@ -2,8 +2,13 @@
 package com.teste.boot.service;
 
 import java.math.BigDecimal;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.springframework.stereotype.Service;
+
+import com.teste.boot.exception.CombinacaoDddNaoAtendidaException;
 
 /**
  * Centraliza a consulta das tarifas por combinação de DDD.
@@ -11,35 +16,33 @@ import org.springframework.stereotype.Service;
 @Service
 public class TarifaService {
 
+    private static final Map<String, BigDecimal> TARIFAS = criarTarifas();
+
+    private static Map<String, BigDecimal> criarTarifas() {
+        Map<String, BigDecimal> tarifas = new HashMap<>();
+
+        tarifas.put("011-016", new BigDecimal("1.90"));
+        tarifas.put("011-017", new BigDecimal("1.70"));
+        tarifas.put("016-011", new BigDecimal("2.90"));
+        tarifas.put("017-011", new BigDecimal("2.70"));
+        tarifas.put("011-018", new BigDecimal("0.90"));
+        tarifas.put("018-011", new BigDecimal("1.90"));
+
+        return Collections.unmodifiableMap(tarifas);
+    }
+
     public BigDecimal buscarTarifa(String codigoOrigem, String codigoDestino) {
+        String combinacao = codigoOrigem + "-" + codigoDestino;
 
-        if ("011".equals(codigoOrigem) && "016".equals(codigoDestino)) {
-            return new BigDecimal("1.90");
+        BigDecimal tarifa = TARIFAS.get(combinacao);
+
+        if (tarifa == null) {
+            throw new CombinacaoDddNaoAtendidaException(
+                    codigoOrigem,
+                    codigoDestino
+            );
         }
 
-        if ("011".equals(codigoOrigem) && "017".equals(codigoDestino)) {
-            return new BigDecimal("1.70");
-        }
-
-        if ("016".equals(codigoOrigem) && "011".equals(codigoDestino)) {
-            return new BigDecimal("2.90");
-        }
-
-        if ("017".equals(codigoOrigem) && "011".equals(codigoDestino)) {
-            return new BigDecimal("2.70");
-        }
-
-        if ("011".equals(codigoOrigem) && "018".equals(codigoDestino)) {
-            return new BigDecimal("0.90");
-        }
-
-        if ("018".equals(codigoOrigem) && "011".equals(codigoDestino)) {
-            return new BigDecimal("1.90");
-        }
-
-        throw new IllegalArgumentException(
-                "Combinação de DDD não atendida: "
-                        + codigoOrigem + " para " + codigoDestino
-        );
+        return tarifa;
     }
 }

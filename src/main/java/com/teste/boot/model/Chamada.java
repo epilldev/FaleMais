@@ -1,24 +1,59 @@
 
 package com.teste.boot.model;
 
-import java.text.DecimalFormat;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+import java.util.Locale;
+
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 
 /**
- * Representa os dados e os resultados financeiros de uma chamada.
+ * Representa os dados de entrada e os resultados financeiros de uma chamada.
+ * Centraliza as operações de cálculo dos valores dos planos FaleMais.
  */
 public class Chamada {
 
-	protected String codigo_origem;
-	protected String codigo_destino;
+	@NotBlank(message = "O DDD de origem é obrigatório.")
+	@Pattern(regexp = "\\d{3}", message = "O DDD de origem deve possuir três dígitos.")
+	private String codigo_origem;
+
+	@NotBlank(message = "O DDD de destino é obrigatório.")
+	@Pattern(regexp = "\\d{3}", message = "O DDD de destino deve possuir três dígitos.")
+	private String codigo_destino;
+
 	private String nome;
-	protected int tempo = 0;
-	protected BigDecimal tarifa = BigDecimal.ZERO;
-	protected String valor_plano = "0,00";
-	protected String valor_normal = "0,00";
+
+	@NotNull(message = "A duração da chamada é obrigatória.")
+	@Min(value = 1, message = "A duração deve ser de pelo menos um minuto.")
+	@Max(value = 1440, message = "A duração máxima permitida é de 1440 minutos.")
+	private Integer tempo;
+
+	private BigDecimal tarifa = BigDecimal.ZERO;
+
+	private String valor_plano = "0,00";
+	private String valor_normal = "0,00";
+
+	@NotBlank(message = "Selecione um plano FaleMais.")
 	private String tipo_plano;
 
-	private final DecimalFormat df = new DecimalFormat("#,##0.00");
+	private final DecimalFormat df = criarFormatadorMonetario();
+
+	private DecimalFormat criarFormatadorMonetario() {
+		DecimalFormatSymbols simbolos = new DecimalFormatSymbols(
+				new Locale("pt", "BR")
+		);
+
+		DecimalFormat formatador = new DecimalFormat("#,##0.00", simbolos);
+		formatador.setRoundingMode(RoundingMode.HALF_UP);
+
+		return formatador;
+	}
 
 	public String getCodigo_origem() {
 		return codigo_origem;
@@ -44,11 +79,11 @@ public class Chamada {
 		this.nome = nome;
 	}
 
-	public int getTempo() {
+	public Integer getTempo() {
 		return tempo;
 	}
 
-	public void setTempo(int tempo) {
+	public void setTempo(Integer tempo) {
 		this.tempo = tempo;
 	}
 
@@ -57,7 +92,7 @@ public class Chamada {
 	}
 
 	public void setTarifa(BigDecimal tarifa) {
-		this.tarifa = tarifa;
+		this.tarifa = tarifa != null ? tarifa : BigDecimal.ZERO;
 	}
 
 	public String getValor_plano() {
@@ -84,31 +119,25 @@ public class Chamada {
 		this.tipo_plano = tipo_plano;
 	}
 
-	public Chamada faleMais30(Chamada object) {
-		calcularValorPlano(object, 30);
-		return object;
+	public void faleMais30() {
+		calcularValorPlano(30);
 	}
 
-	public Chamada faleMais60(Chamada object) {
-		calcularValorPlano(object, 60);
-		return object;
+	public void faleMais60() {
+		calcularValorPlano(60);
 	}
 
-	public Chamada faleMais120(Chamada object) {
-		calcularValorPlano(object, 120);
-		return object;
+	public void faleMais120() {
+		calcularValorPlano(120);
 	}
+
 	/**
 	 * Calcula o valor da chamada considerando os minutos gratuitos do plano.
 	 */
-	private void calcularValorPlano(Chamada chamada, int minutosGratuitos) {
+	private void calcularValorPlano(int minutosGratuitos) {
+		int minutosExcedentes = Math.max(0, this.tempo - minutosGratuitos);
 
-		int minutosExcedentes = Math.max(
-				0,
-				chamada.tempo - minutosGratuitos
-		);
-
-		BigDecimal tarifaComAcrescimo = chamada.tarifa.multiply(
+		BigDecimal tarifaComAcrescimo = this.tarifa.multiply(
 				new BigDecimal("1.10")
 		);
 
@@ -116,21 +145,18 @@ public class Chamada {
 				BigDecimal.valueOf(minutosExcedentes)
 		);
 
-		chamada.valor_plano = df.format(valor);
+		this.valor_plano = df.format(valor);
 	}
 
 	/**
 	 * Calcula o valor da chamada sem aplicar os minutos gratuitos.
 	 */
-	public Chamada tarifaNormal(Chamada chamada) {
-
-		BigDecimal valor = chamada.tarifa.multiply(
-				BigDecimal.valueOf(chamada.tempo)
+	public void tarifaNormal() {
+		BigDecimal valor = this.tarifa.multiply(
+				BigDecimal.valueOf(this.tempo)
 		);
 
-		chamada.valor_normal = df.format(valor);
-
-		return chamada;
+		this.valor_normal = df.format(valor);
 	}
 
 	public enum TipoPlano {
