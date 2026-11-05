@@ -1,61 +1,132 @@
 <!DOCTYPE html>
-<html lang="pt" xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:th="http://www.thymeleaf.org"
-	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<html lang="pt-BR"
+	  xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+
 <head>
-<title>Processo Seletivo- Dev. Jr</title>
-<meta charset="UTF-8" />
-<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-<meta name="viewport"
-	content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-<meta name="description" content="" />
-<meta name="author" content="" />
-<link rel="icon" href="/image/favicon.png" />
+	<meta charset="UTF-8"/>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+	<meta name="viewport"
+		  content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
 
-<!-- Bootstrap core CSS -->
-<link href="/webjars/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
-<link href="/webjars/open-iconic/font/css/open-iconic-bootstrap.min.css"
-	rel="stylesheet" />
+	<meta name="description" content="Simulador de chamadas FaleMais"/>
+	<meta name="author" content="FaleMais"/>
 
-<!-- Custom styles for this template -->
-<link href="/css/style.css" rel="stylesheet" />
+	<title layout:title-pattern="$CONTENT_TITLE | FaleMais">
+		FaleMais
+	</title>
+
+	<link rel="icon" href="/image/favicon.png"/>
+
+	<!-- Bootstrap CSS -->
+	<link href="/webjars/bootstrap/css/bootstrap.min.css"
+		  rel="stylesheet"/>
+
+	<!-- Open Iconic -->
+	<link href="/webjars/open-iconic/font/css/open-iconic-bootstrap.min.css"
+		  rel="stylesheet"/>
+
+	<!-- CSS personalizado -->
+	<link href="/css/style.css" rel="stylesheet"/>
 </head>
+
 <body>
-	<header th:replace="fragments/header :: cabecalho">
-		<div>Header</div>
-	</header>
 
-	<div class="layout-main">
-		<aside>
-			<nav th:replace="fragments/sidebar :: nav-sidebar">
-				<span>Parte do menu</span>
-			</nav>
-		</aside>
+<!-- Cabeçalho principal -->
+<header th:replace="fragments/header :: cabecalho">
+	<div>Header</div>
+</header>
 
-		<section layout:fragment="corpo">
-			<div>Conteudo estático da página</div>
-		</section>
+<!-- Estrutura principal da aplicação -->
+<div class="layout-main">
+
+	<!-- Menu lateral -->
+	<aside class="layout-sidebar">
+		<nav id="menu-principal"
+			 th:replace="fragments/sidebar :: nav-sidebar">
+			<span>Menu principal</span>
+		</nav>
+	</aside>
+
+	<!-- Área de conteúdo -->
+	<div class="layout-page">
+
+		<main class="layout-content"
+			  layout:fragment="corpo">
+
+			<div class="container-fluid">
+				Conteúdo da página
+			</div>
+
+		</main>
+
 	</div>
 
+</div>
 
+<!-- Rodapé global: fora da estrutura principal para ocupar toda a largura -->
+<footer th:replace="fragments/footer :: rodape">
+	<div>Rodapé</div>
+</footer>
 
-	<script src="/webjars/jquery/jquery.min.js"></script>
-	<script src="/webjars/jquery-mask-plugin/dist/jquery.mask.min.js"></script>
-	<script
-		src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
-	<script src="/webjars/bootstrap/js/bootstrap.min.js"></script>
-	<script type="text/javascript">
-	    
-		$(function() {
-			$('[data-toggle="popover"]').popover();
-		});
-		
-		$(document).ready(function(){
-		    $(".navbar-toggle").click(function(){
-		        $(".sidebar").toggleClass("sidebar-open");
-		    })
-		});
+<!-- Fundo para fechamento do menu em dispositivos móveis -->
+<div class="sidebar-backdrop"></div>
 
-	</script>
+<!-- jQuery -->
+<script src="/webjars/jquery/jquery.min.js"></script>
+
+<!-- jQuery Mask -->
+<script src="/webjars/jquery-mask-plugin/dist/jquery.mask.min.js"></script>
+
+<!-- Popper -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+
+<!-- Bootstrap JS -->
+<script src="/webjars/bootstrap/js/bootstrap.min.js"></script>
+
+<!-- Scripts da aplicação -->
+<script>
+	$(function () {
+
+        // Inicialização dos popovers
+        $('[data-toggle="popover"]').popover();
+
+        // Abre e fecha o menu lateral
+        $('.sidebar-toggle').on('click', function () {
+
+            var isOpen = $('body').hasClass('sidebar-mobile-open');
+
+            $('body').toggleClass('sidebar-mobile-open');
+
+            $(this).attr('aria-expanded', !isOpen);
+
+        });
+
+        // Fecha o menu ao clicar no fundo
+        $('.sidebar-backdrop').on('click', function () {
+
+            $('body').removeClass('sidebar-mobile-open');
+
+            $('.sidebar-toggle').attr('aria-expanded', 'false');
+
+        });
+
+        // Fecha o menu ao pressionar ESC
+        $(document).on('keydown', function (event) {
+
+            if (event.key === 'Escape') {
+
+                $('body').removeClass('sidebar-mobile-open');
+
+                $('.sidebar-toggle').attr('aria-expanded', 'false');
+
+            }
+
+        });
+
+    });
+</script>
+
 </body>
 </html>

@@ -1,88 +1,162 @@
+
 <!DOCTYPE html>
-<html layout:decorate="~{layout}">
+<html layout:decorate="~{layout}"
+	  xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+
 <head>
-<meta charset="UTF-8" />
+	<meta charset="UTF-8"/>
+	<title>Início</title>
 </head>
+
 <body>
-	<section class="layout-content" layout:fragment="corpo">
 
-		<nav class="navbar navbar-expand-md bg-light">
-			<div class="collapse navbar-collapse" id="navbarsExampleDefault">
-				<ul class="navbar-nav mr-auto">
-					<li class="nav-item active"><i class="oi oi-caret-right"></i>
-						<span>Conheça mais</span></li>
-				</ul>
-			</div>
-		</nav>
+<section layout:fragment="corpo">
 
-		<div class="container">
-			<div id="list-home" class="row">
-				<div class="col-4">
-					<div class="list-group" id="list-tab" role="tablist">
-						<a class="list-group-item list-group-item-action active"
-							id="list-spring-boot-list" data-toggle="list" href="#spring-boot"
-							role="tab" aria-controls="spring-boot">Spring-Boot</a> <a
-							class="list-group-item list-group-item-action" id="list-sts-list"
-							data-toggle="list" href="#sts" role="tab" aria-controls="sts">Spring
-							Tool Suite</a> <a class="list-group-item list-group-item-action"
-							id="list-thymeleaf-list" data-toggle="list" href="#thymeleaf"
-							role="tab" aria-controls="thymeleaf">Thymeleaf</a> <a
-							class="list-group-item list-group-item-action"
-							id="list-webjars-list" data-toggle="list" href="#webjars"
-							role="tab" aria-controls="webjars">WebJars</a> <a
-							class="list-group-item list-group-item-action"
-							id="list-bootstrap-list" data-toggle="list" href="#bootstrap"
-							role="tab" aria-controls="bootstrap">Bootstrap 4</a>
-					</div>
-				</div>
-				<div class="col-8">
-					<div class="tab-content" id="nav-tabContent">
-						<div class="tab-pane fade show active" id="spring-boot"
-							role="tabpanel" aria-labelledby="list-spring-boot-list">
-							O <a href="https://projects.spring.io/spring-boot/">Spring
-								Boot</a> facilita a criação de aplicativos autônomos baseados em
-							Spring de nível de produção que você pode "simplesmente
-							executar". A maioria dos aplicativos do Spring Boot precisa de
-							muito pouca configuração do Spring.
-						</div>
-						<div class="tab-pane fade" id="sts" role="tabpanel"
-							aria-labelledby="list-sts-list">
-							O <a href="https://spring.io/tools">Spring Tool Suite</a> Spring
-							Tool Suite é um ambiente de desenvolvimento baseado em Eclipse
-							que é customizado para desenvolver aplicativos Spring. Ele
-							fornece um ambiente pronto para uso para implementar, depurar,
-							executar e implantar os aplicativos Spring.
-						</div>
-						<div class="tab-pane fade" id="thymeleaf" role="tabpanel"
-							aria-labelledby="list-thymeleaf-list">
-							<a href="http://www.thymeleaf.org/">Thymeleaf</a> é um mecanismo
-							de modelo Java moderno do lado do servidor para ambientes da Web
-							e independentes. Com módulos para Spring Framework, um host de
-							integrações com ferramentas utilizadas e a capacidade de
-							conectar sua própria funcionalidade, o Thymeleaf é ideal para o
-							desenvolvimento da Web HTML5 JVM moderno - embora haja muito mais
-							que ele pode fazer.
-						</div>
-						<div class="tab-pane fade" id="webjars" role="tabpanel"
-							aria-labelledby="list-webjars-list">
-							<a href="https://www.webjars.org/">WebJars</a> são bibliotecas da
-							web do lado do cliente (por exemplo, jQuery; Bootstrap)
-							compactadas em arquivos JAR (Java Archive).
-						</div>
+	<div class="container-fluid">
 
-						<div class="tab-pane fade" id="bootstrap" role="tabpanel"
-							aria-labelledby="list-bootstrap-list">
-							<a href="https://getbootstrap.com/">Bootstrap</a> é um kit de
-							ferramentas de código aberto para desenvolvimento com HTML, CSS e
-							JS. Possibilitando a criação protótipos de ideias ou construa um
-							aplicativo inteiro com as variáveis oferecidas ​e mixins Sass,
-							sistema de grade responsivo, extensos componentes pré-construídos
-							e plug-ins poderosos construídos em jQuery.
-						</div>
-					</div>
-				</div>
-			</div>
+		<!-- Cabeçalho da página -->
+		<div class="page-heading mb-4">
+
+            <span class="page-eyebrow">
+                BEM-VINDO AO FALEMAIS
+            </span>
+
+			<h1>Economize nas suas ligações</h1>
+
+			<p>
+				Compare os valores das suas chamadas e descubra
+				quanto você pode economizar com nossos planos.
+			</p>
+
 		</div>
-	</section>
+
+		<!-- Banner principal -->
+		<div class="home-hero mb-4">
+
+			<div class="home-hero-content">
+
+                <span class="hero-label">
+                    SIMULADOR DE LIGAÇÕES
+                </span>
+
+				<h2>
+					Fale mais.<br/>
+					Pague menos.
+				</h2>
+
+				<p>
+					Simule suas chamadas de longa distância e encontre
+					o plano ideal para o seu perfil.
+				</p>
+
+				<a href="/chamadas/calculo" class="btn btn-light btn-lg">
+					<span class="oi oi-calculator mr-2" aria-hidden="true"></span>
+					Simular chamada
+				</a>
+
+			</div>
+
+			<div class="home-hero-icon" aria-hidden="true">
+				<span class="oi oi-phone"></span>
+			</div>
+
+		</div>
+
+		<!-- Cards informativos -->
+		<div class="row">
+
+			<div class="col-md-4 mb-3">
+				<div class="home-info-card h-100">
+
+					<div class="info-card-icon" aria-hidden="true">
+						<span class="oi oi-calculator"></span>
+					</div>
+
+					<h3>Simule sua chamada</h3>
+
+					<p>
+						Informe os DDDs, a duração da ligação e
+						compare os preços com e sem plano.
+					</p>
+
+					<a href="/chamadas/calculo" class="info-card-link">
+						Fazer simulação
+						<span class="oi oi-arrow-right ml-1" aria-hidden="true"></span>
+					</a>
+
+				</div>
+			</div>
+
+			<div class="col-md-4 mb-3">
+				<div class="home-info-card h-100">
+
+					<div class="info-card-icon" aria-hidden="true">
+						<span class="oi oi-list"></span>
+					</div>
+
+					<h3>Conheça os planos</h3>
+
+					<p>
+						Explore as opções FaleMais 30, 60 e 120
+						e entenda qual delas atende melhor suas necessidades.
+					</p>
+
+					<a href="/planos" class="info-card-link">
+						Conhecer planos
+						<span class="oi oi-arrow-right ml-1" aria-hidden="true"></span>
+					</a>
+
+				</div>
+			</div>
+
+			<div class="col-md-4 mb-3">
+				<div class="home-info-card h-100">
+
+					<div class="info-card-icon" aria-hidden="true">
+						<span class="oi oi-chart" aria-hidden="true"></span>
+					</div>
+
+					<h3>Compare os valores</h3>
+
+					<p>
+						Visualize a diferença entre contratar um plano
+						e realizar suas chamadas sem benefícios.
+					</p>
+
+					<a href="/chamadas" class="info-card-link">
+						Consultar chamadas
+						<span class="oi oi-arrow-right ml-1" aria-hidden="true"></span>
+					</a>
+
+				</div>
+			</div>
+
+		</div>
+
+		<!-- Informações sobre o funcionamento -->
+		<div class="home-bottom-card mt-3">
+
+			<div class="home-bottom-content">
+
+				<h3>Como funciona o FaleMais?</h3>
+
+				<p>
+					Com um plano FaleMais, você aproveita uma quantidade
+					de minutos gratuitos de acordo com o plano escolhido.
+					Se ultrapassar esse limite, paga apenas pelos minutos
+					excedentes, com acréscimo de 10% sobre a tarifa normal.
+				</p>
+
+			</div>
+
+			<span class="oi oi-info home-bottom-icon" aria-hidden="true"></span>
+
+		</div>
+
+	</div>
+
+</section>
+
 </body>
 </html>

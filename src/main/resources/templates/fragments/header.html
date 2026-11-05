@@ -1,18 +1,53 @@
+
 <!DOCTYPE html>
-<html>
-<head><meta charset="UTF-8"></head>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8"/>
+</head>
+
 <body>
+
 <header th:fragment="cabecalho">
-		<nav class="navbar navbar-inverse navbar navbar-dark bg-dark fixed-top">
-			<div class="container-fluid">
-				<div class="navbar-header">
-					<button type="button" class="btn btn-dark navbar-toggle pull-left">
-						<i class="oi oi-menu"></i>
-					</button>				
-					<a class="navbar-brand navbar-toggle pull-left" href="/"> FaleMais -  VsysTel</a>
-				</div>
+
+	<nav class="navbar app-header fixed-top">
+
+		<div class="container-fluid d-flex align-items-center">
+
+			<!-- Botão para abrir/fechar o menu lateral -->
+			<button type="button"
+					class="sidebar-toggle mr-3"
+					aria-label="Abrir menu de navegação"
+					aria-controls="menu-principal"
+					aria-expanded="false">
+
+				<span class="oi oi-menu" aria-hidden="true"></span>
+
+			</button>
+
+			<!-- Identidade visual da aplicação -->
+			<a class="navbar-brand d-flex align-items-center mb-0"
+			   href="/"
+			   title="Página inicial do FaleMais">
+
+				<span class="brand-name">FaleMais</span>
+
+				<span class="brand-divider"></span>
+
+				<span class="brand-company">VsysTel</span>
+
+			</a>
+
+			<!-- Descrição do sistema -->
+			<div class="ml-auto header-description">
+				Simulador de chamadas
 			</div>
-		</nav>
-	</header>
+
+		</div>
+
+	</nav>
+
+</header>
+
 </body>
 </html>
